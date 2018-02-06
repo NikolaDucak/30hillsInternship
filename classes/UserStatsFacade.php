@@ -18,13 +18,13 @@ class UserStatsFacade
 			$allUsers = Analyzer::getAllUsers();
 			$view->listOut("people-list", $allUsers);
 
-			$friends = $userData->directFriends();
+			$friends = $userData->getFriends();
 			$view->listOut("direct-friends-list",$friends);
 
-			$outerFriends = $userData->outerFriends();
+			$outerFriends = $userData->getOuterFriends();
 			$view->listOut("outer-friends-list",$outerFriends);
 
-			$friendSuggestions = $userData->friendSuggestions();
+			$friendSuggestions = $userData->GetFriendSuggestions();
 			$view->listOut("friend-sugestion-list",$friendSuggestions);
 
 			$view->userDetails($user);

@@ -1,0 +1,41 @@
+[1mdiff --git a/classes/analyzer.php b/classes/analyzer.php[m
+[1mindex 697d286..12b2ef0 100644[m
+[1m--- a/classes/analyzer.php[m
+[1m+++ b/classes/analyzer.php[m
+[36m@@ -11,7 +11,7 @@[m [mclass Analyzer[m
+ 		$this->_user = $user;	[m
+ 	}[m
+ [m
+[31m-	public function directFriends()[m
+[32m+[m	[32mprivate function directFriends()[m
+ 	{[m
+ 		foreach ($this->_user->friends as $friend){[m
+ 			$this->_directFriends[]= new User($friend);[m
+[36m@@ -20,7 +20,7 @@[m [mclass Analyzer[m
+ 		return $this->_directFriends;[m
+ 	}[m
+ [m
+[31m-	public function outerFriends()[m
+[32m+[m	[32mprivate function outerFriends()[m
+ 	{[m
+ 		foreach ($this->_directFriends as $friend) {[m
+ 			foreach ($friend->friends as $outerFriend) {[m
+[36m@@ -47,7 +47,7 @@[m [mclass Analyzer[m
+ 		return true;[m
+ 	}[m
+ [m
+[31m-	public function friendSuggestions()[m
+[32m+[m	[32mprivate function friendSuggestions()[m
+ 	{[m
+ 		$user = $this->_user;[m
+ 		$posiblesugs = array();[m
+[36m@@ -87,4 +87,8 @@[m [mclass Analyzer[m
+ 		$db = new DB();[m
+ 		return $db->getAllUsers();[m
+ 	}[m
+[32m+[m
+[32m+[m	[32mpublic function getFriends(){ return $this->_directFriends; }[m
+[32m+[m	[32mpublic function getOuterFriends(){ return $this->_outerFriends; }[m
+[32m+[m	[32mpublic function getFriendSuggestions(){ return $this->_friendSuggestions; }[m
+ }[m
+\ No newline at end of file[m

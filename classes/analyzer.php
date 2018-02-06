@@ -9,18 +9,19 @@ class Analyzer
 	function __construct(User $user)
 	{
 		$this->_user = $user;	
+		$this->_directFriends();
+		$this->_outerFriends();
+		$this->_friendSuggestions();
 	}
 
-	public function directFriends()
+	private function _directFriends()
 	{
 		foreach ($this->_user->friends as $friend){
 			$this->_directFriends[]= new User($friend);
 		}
-
-		return $this->_directFriends;
 	}
 
-	public function outerFriends()
+	private function _outerFriends()
 	{
 		foreach ($this->_directFriends as $friend) {
 			foreach ($friend->friends as $outerFriend) {
@@ -32,7 +33,6 @@ class Analyzer
 				}
 			}
 		}
-		return $this->_outerFriends;
 	}
 
 	private function _notInList($personId, $list)
@@ -47,7 +47,7 @@ class Analyzer
 		return true;
 	}
 
-	public function friendSuggestions()
+	private function _friendSuggestions()
 	{
 		$user = $this->_user;
 		$posiblesugs = array();
@@ -56,7 +56,7 @@ class Analyzer
 			foreach ($outerFriend->friends as $Suggestion) {
 			 	
 			 	if ($Suggestion != $this->_user->id) {
-				 	$mutualFriends = $this->checkMutual(new User($Suggestion), $this->_user);
+				 	$mutualFriends = $this->_checkMutual(new User($Suggestion), $this->_user);
 				 	
 				 	if (($mutualFriends>=2) 
 				 	&& ($this->_notInList($Suggestion, $this->_directFriends))
@@ -66,10 +66,9 @@ class Analyzer
 			 	}
 			} 
 		}
-		return $this->_friendSuggestions;
 	}
 
-	private function checkMutual($start, $end)
+	private function _checkMutual($start, $end)
 	{
 		$count = 0;	
 		foreach ($start->friends as $friend) {
@@ -87,4 +86,8 @@ class Analyzer
 		$db = new DB();
 		return $db->getAllUsers();
 	}
+
+	public function getFriends(){ return $this->_directFriends; }
+	public function getOuterFriends(){ return $this->_outerFriends; }
+	public function getFriendSuggestions(){ return $this->_friendSuggestions; }
 }
